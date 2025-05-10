@@ -211,7 +211,7 @@ const handleSubmit = (e: React.FormEvent) => {
 
         <button
           type="submit"
-          className="absolute bottom-10 left-4 bg-[#27548A] text-white px-4 py-2 rounded-2xl hover:bg-[#183B4E]"
+          className="absolute bottom-[-10] right-4 bg-[#27548A] text-white px-4 py-2 rounded-2xl hover:bg-[#183B4E]"
         >
           Submit
         </button>
