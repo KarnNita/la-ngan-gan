@@ -173,9 +173,7 @@ const handleSubmit = (e: React.FormEvent) => {
               mode="single"
               selected={endDate}
               onSelect={(endDate)=>{
-                if(!startDate) return;
-                if(!endDate) return;
-                if(startDate > endDate) return;
+                if(!startDate || !endDate || (startDate > endDate)) return;
                 setEndDate(endDate);
                 calculateDays(startDate, endDate);
               }}
