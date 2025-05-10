@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import emailjs from "emailjs-com";
 import { useNavigate } from "react-router-dom";
+import { Calendar } from "~/components/ui/calendar";
 
 const mockEmployees = [
   {
@@ -45,8 +44,8 @@ function AddNewRecord() {
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState("");
   const [leaveType, setLeaveType] = useState<LeaveType>("sick");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
   const [managerEmail, setManagerEmail] = useState("");
   const [daysOff, setDaysOff] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -57,6 +56,8 @@ function AddNewRecord() {
     const diff = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     setDaysOff(diff);
   };
+
+
 
 const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
@@ -74,7 +75,7 @@ const handleSubmit = (e: React.FormEvent) => {
     return;
   }
 
-  setErrorMessage(""); // ✅ ล้าง error message ตรงนี้ ก่อนเปิด confirm box
+  setErrorMessage(""); 
 
   const isConfirmed = window.confirm("Are you sure you want to submit the leave request?");
   if (isConfirmed) {
@@ -158,28 +159,27 @@ const handleSubmit = (e: React.FormEvent) => {
         <div className="flex gap-4 mb-4">
           <div>
             <label className="block mb-1 font-medium text-[#27548A]">Start Date</label>
-            <DatePicker
+            <Calendar
+              mode="single"
               selected={startDate}
-              onChange={(date) => {
-                setStartDate(date);
-                if (date && endDate) calculateDays(date, endDate);
-              }}
+              onSelect={setStartDate}
               className="border px-3 py-2 rounded bg-[#F3F3E0] text-black"
-              dateFormat="yyyy-MM-dd"
             />
           </div>
 
           <div>
             <label className="block mb-1 font-medium text-[#27548A]">End Date</label>
-            <DatePicker
+            <Calendar
+              mode="single"
               selected={endDate}
-              onChange={(date) => {
-                setEndDate(date);
-                if (startDate && date) calculateDays(startDate, date);
+              onSelect={(endDate)=>{
+                if(!startDate) return;
+                if(!endDate) return;
+                if(startDate > endDate) return;
+                setEndDate(endDate);
+                calculateDays(startDate, endDate);
               }}
               className="border px-3 py-2 rounded bg-[#F3F3E0] text-black"
-              dateFormat="yyyy-MM-dd"
-              minDate={startDate || new Date()}
             />
           </div>
 
